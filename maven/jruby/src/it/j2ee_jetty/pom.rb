@@ -1,8 +1,8 @@
 # it is war-file
 packaging 'war'
 
-# get jruby dependencies
-properties( 'jruby.version' => '@project.version@',
+# default versions will be overwritten by pom.rb from root directory
+properties( 'jruby.plugins.version' => '1.0.10',
             'project.build.sourceEncoding' => 'utf-8' )
 
 pom( 'org.jruby:jruby', '${jruby.version}' )
@@ -16,14 +16,6 @@ repository( :url => 'http://rubygems-proxy.torquebox.org/releases',
 jruby_plugin :gem, :includeRubygemsInResources => true do
   execute_goal :initialize
 end 
-execute 'jrubydir', 'initialize' do |ctx|
-  require 'jruby/commands'
-  JRuby::Commands.generate_dir_info( ctx.project.build.directory.to_pathname + '/rubygems' )
-end
-
-# ruby-maven will dump an equivalent pom.xml
-properties( 'tesla.dump.pom' => 'pom.xml',
-            'jruby.home' => '../../../../../' )
 
 # start jetty for the tests
 plugin( 'org.eclipse.jetty:jetty-maven-plugin', '9.1.3.v20140225',
